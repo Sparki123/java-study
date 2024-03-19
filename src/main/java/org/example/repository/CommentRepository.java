@@ -1,6 +1,7 @@
-package org.example;
+package org.example.repository;
 
-import org.example.model.Comment;
+import org.example.model.entity.Comment;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,12 +12,13 @@ import java.util.List;
 import static java.sql.DriverManager.getConnection;
 
 
-public class CommentsRepository {
+public class CommentRepository {
 
-    private static final String url = "jdbc:postgresql://localhost:5432/study-habr";
-    private static final String username = "user";
-    private static final String password = "user";
-    public static void addCommentToPost(int postId, String author, String comment) {
+    private final String url = "jdbc:postgresql://localhost:5432/study-habr";
+    private final String username = "user";
+    private final String password = "user";
+
+    public void addCommentToPost(int postId, String author, String comment) {
         try (Connection connection = getConnection(url, username, password);
              PreparedStatement statement = connection.prepareStatement("INSERT INTO comments (post_id, author, comment) VALUES (?, ?, ?)")) {
             statement.setInt(1, postId);
@@ -28,7 +30,7 @@ public class CommentsRepository {
         }
     }
 
-    public static void updateComment(int commentId, String updatedComment) {
+    public void updateComment(int commentId, String updatedComment) {
         try (Connection connection = getConnection(url, username, password);
              PreparedStatement statement = connection.prepareStatement("UPDATE comments SET comment=? WHERE comment_id=?")) {
             statement.setString(1, updatedComment);
@@ -39,7 +41,7 @@ public class CommentsRepository {
         }
     }
 
-    public static void deleteComment(int commentId) {
+    public void deleteComment(int commentId) {
         try (Connection connection = getConnection(url, username, password);
              PreparedStatement statement = connection.prepareStatement("DELETE FROM comments WHERE comment_id=?")) {
             statement.setInt(1, commentId);
@@ -49,14 +51,18 @@ public class CommentsRepository {
         }
     }
 
-    public static List<Comment> getComments(int postId) {
+    public List<Comment> getComments(int postId) {
         List<Comment> comments = new ArrayList<>();
         try (Connection connection = getConnection(url, username, password);
              PreparedStatement statement = connection.prepareStatement("SELECT * FROM comments WHERE post_id = ?")) {
             statement.setInt(1, postId);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                Comment comment = new Comment(resultSet.getInt("comment_id"), resultSet.getString("author"), resultSet.getString("comment"));
+                Comment comment = Comment.builder()
+                        .id(resultSet.getLong("id"))
+                        .author(resultSet.getString("author"))
+                        .comment(resultSet.getString("comment"))
+                        .build();
                 comments.add(comment);
             }
         } catch (SQLException e) {
