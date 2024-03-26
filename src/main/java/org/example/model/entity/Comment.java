@@ -8,7 +8,7 @@ import java.util.Objects;
 @Data
 @Builder
 public class Comment {
-    private String id;
+    private Long id;
     private String author;
     private String comment;
 
