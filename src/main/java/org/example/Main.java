@@ -11,6 +11,14 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+//todo: junit 5 with databases
+//todo: map struct
+
+//todo: jacoco для подсчета покрытия
+//todo: spotbugs-maven-plugin
+
+//todo: maven, docker
+
 public class Main {
     public static void main(String[] args) {
         init();

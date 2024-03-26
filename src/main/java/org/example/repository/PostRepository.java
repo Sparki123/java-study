@@ -18,6 +18,7 @@ public class PostRepository implements CrudRepository<Post, Long> {
     public static final String INSERT_POST_QUERY = "INSERT INTO posts (title, content) VALUES (?, ?)";
     public static final String UPDATE_POST_QUERY = "UPDATE posts SET title = ?, content = ? WHERE id = ?";
     public static final String SELECT_ALL_POSTS = "SELECT * FROM posts";
+    public static final String SELECT_POST_WITH_COMMENTS = "SELECT * FROM posts LEFT JOIN comments ON posts.id = comments.post_id  WHERE posts.id = ?";
     private static final String POST_BY_ID_QUERY = "SELECT * FROM posts WHERE post_id = ?";
     private static final String DELETE_POST_QUERY = "DELETE FROM posts WHERE id = ?";
 
@@ -96,10 +97,10 @@ public class PostRepository implements CrudRepository<Post, Long> {
                         .content(resultSet.getString("content"))
                         .build());
             }
+            return Optional.empty();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new IllegalStateException(e);
         }
-        return Optional.empty();
     }
 
     @Override
@@ -113,45 +114,35 @@ public class PostRepository implements CrudRepository<Post, Long> {
         }
     }
 
-    //todo: refactor with join - refactor this i dont like it, bcs its very strange =(
-    public Optional<Post> getPostWithComments(Long postId) {
+    public Optional<Post> getPostWithComments(final Long postId) {
         try (Connection connection = PgConnectUtil.getConnection();
-             PreparedStatement statement = connection.prepareStatement("SELECT * FROM posts LEFT JOIN comments ON posts.id = comments.post_id  WHERE posts.id = ?")) {
+             PreparedStatement statement = connection.prepareStatement(SELECT_POST_WITH_COMMENTS)) {
             statement.setLong(1, postId);
             try (ResultSet resultSet = statement.executeQuery()) {
-                Post post = null;
+                if (!resultSet.next()) {
+                    return Optional.empty();
+                }
+
+                final Post post = Post.builder()
+                    .id(resultSet.getLong("post_id"))
+                    .content(resultSet.getString("content"))
+                    .title(resultSet.getString("title"))
+                    .build();
+
                 while (resultSet.next()) {
-                    //TODO поправить без проверки
-                    if (post == null) {
-                        post = Post.builder()
-                            .id(resultSet.getLong("post_id"))
-                            .content(resultSet.getString("content"))
-                            .title(resultSet.getString("title"))
-                            .build();
-                    }
-
-                    Long commentId = resultSet.getLong(5);
-                    if (commentId == null) {
-                        continue;
-                    }
-                    String commentContent = resultSet.getString("comment");
-                    String commentAuthor = resultSet.getString("author");
-
-                    Comment comment = Comment.builder()
-                        .id(commentId)
-                        .comment(commentContent)
-                        .author(commentAuthor)
+                    final Comment comment = Comment.builder()
+                        .id(resultSet.getLong(5))
+                        .comment(resultSet.getString("comment"))
+                        .author(resultSet.getString("author"))
                         .postId(post.getId())
                         .build();
 
                     post.getComments().add(comment);
-
                 }
                 return Optional.of(post);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new IllegalStateException(e);
         }
-        return Optional.empty();
     }
 }

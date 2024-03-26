@@ -14,12 +14,11 @@ import java.util.Optional;
 
 public class CommentRepository implements CrudRepository<Comment, Long> {
 
+    public static final String SELECT_ALL_COMMENTS = "SELECT * FROM comments";
     private static final String INSERT_COMMENT_QUERY = "INSERT INTO comments (author, comment, post_id) VALUES (?, ?, ?)";
     private static final String UPDATE_COMMENT_QUERY = "UPDATE comments SET author = ?, comment = ? WHERE id = ?";
     private static final String DELETE_COMMENT_QUERY = "DELETE FROM comments WHERE id = ?";
     private static final String FIND_BY_ID_QUERY = "SELECT * FROM comments WHERE id = ?";
-
-    public static final String SELECT_ALL_COMMENTS = "SELECT * FROM comments";
 
     @Override
     public List<Comment> findAll() {
