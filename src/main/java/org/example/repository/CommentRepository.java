@@ -1,7 +1,6 @@
 package org.example.repository;
 
 import org.example.model.entity.Comment;
-import org.example.model.entity.Post;
 import org.example.util.PgConnectUtil;
 
 import java.sql.Connection;
@@ -13,11 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static java.sql.DriverManager.getConnection;
-
 public class CommentRepository implements CrudRepository<Comment, Long> {
 
-    private static final String INSERT_COMMENT_QUERY = "INSERT INTO comments (author, comment) VALUES (?, ?)";
+    private static final String INSERT_COMMENT_QUERY = "INSERT INTO comments (author, comment, post_id) VALUES (?, ?, ?)";
     private static final String UPDATE_COMMENT_QUERY = "UPDATE comments SET author = ?, comment = ? WHERE id = ?";
     private static final String DELETE_COMMENT_QUERY = "DELETE FROM comments WHERE id = ?";
     private static final String FIND_BY_ID_QUERY = "SELECT * FROM comments WHERE id = ?";
@@ -90,8 +87,9 @@ public class CommentRepository implements CrudRepository<Comment, Long> {
              PreparedStatement statement = connection.prepareStatement(INSERT_COMMENT_QUERY, PreparedStatement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, comment.getAuthor());
             statement.setString(2, comment.getComment());
+            statement.setLong(3, comment.getPostId());
             statement.executeUpdate();
-
+            connection.commit();
             try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
                     comment.setId(generatedKeys.getLong(1));
@@ -111,6 +109,8 @@ public class CommentRepository implements CrudRepository<Comment, Long> {
             statement.setString(1, comment.getAuthor());
             statement.setString(2, comment.getComment());
             statement.setLong(3, comment.getId());
+//            statement.setLong(4, comment.getPostId());
+
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

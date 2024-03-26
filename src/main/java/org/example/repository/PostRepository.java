@@ -56,6 +56,7 @@ public class PostRepository implements CrudRepository<Post, Long> {
             statement.setString(1, post.getTitle());
             statement.setString(2, post.getContent());
             statement.executeUpdate();
+            connection.commit();
 
             ResultSet rs = statement.getGeneratedKeys();
             if (rs.next()) {
@@ -120,6 +121,7 @@ public class PostRepository implements CrudRepository<Post, Long> {
             try (ResultSet resultSet = statement.executeQuery()) {
                 Post post = null;
                 while (resultSet.next()) {
+                    //TODO поправить без проверки
                     if (post == null) {
                         post = Post.builder()
                             .id(resultSet.getLong("post_id"))
@@ -128,23 +130,22 @@ public class PostRepository implements CrudRepository<Post, Long> {
                             .build();
                     }
 
-                    long commentId = resultSet.getLong("id");
+                    Long commentId = resultSet.getLong(5);
+                    if (commentId == null) {
+                        continue;
+                    }
                     String commentContent = resultSet.getString("comment");
                     String commentAuthor = resultSet.getString("author");
 
-                    if (commentId != 0) {
-                        Comment comment = Comment.builder()
-                            .id(commentId)
-                            .comment(commentContent)
-                            .author(commentAuthor)
-                            .build();
-                        if (post.getComments() == null) {
-                            post.setComments(new ArrayList<>());
-                            post.getComments().add(comment);
-                        } else {
-                            post.getComments().add(comment);
-                        }
-                    }
+                    Comment comment = Comment.builder()
+                        .id(commentId)
+                        .comment(commentContent)
+                        .author(commentAuthor)
+                        .postId(post.getId())
+                        .build();
+
+                    post.getComments().add(comment);
+
                 }
                 return Optional.of(post);
             }

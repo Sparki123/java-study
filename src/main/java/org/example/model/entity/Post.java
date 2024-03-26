@@ -3,6 +3,7 @@ package org.example.model.entity;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -12,7 +13,8 @@ public class Post {
     private Long id;
     private String title;
     private String content;
-    private List<Comment> comments;
+    @Builder.Default
+    private List<Comment> comments = new ArrayList<>();
 
     @Override
     public boolean equals(final Object o) {
