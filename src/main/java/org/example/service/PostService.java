@@ -18,4 +18,9 @@ public class PostService {
     public Post save(Post post) {
         return postRepository.save(post);
     }
+
+    public Post getPostWithComments(final Long id) {
+        return postRepository.getPostWithComments(id)
+            .orElseThrow(() -> new RuntimeException("Post not found"));
+    }
 }

@@ -11,6 +11,7 @@ public class Comment {
     private Long id;
     private String author;
     private String comment;
+    private Long postId;
 
     @Override
     public boolean equals(Object o) {

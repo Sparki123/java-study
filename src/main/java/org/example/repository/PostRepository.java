@@ -45,12 +45,12 @@ public class PostRepository implements CrudRepository<Post, Long> {
     public Post save(final Post post) {
         if (post.getId() == null) {
             return insert(post);
-        } else {
-            return update(post);
         }
+
+        return update(post);
     }
 
-    public Post insert(final Post post) {
+    private Post insert(final Post post) {
         try (Connection connection = PgConnectUtil.getConnection();
              PreparedStatement statement = connection.prepareStatement(INSERT_POST_QUERY, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, post.getTitle());
