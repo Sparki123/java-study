@@ -1,13 +1,11 @@
 package org.example;
 
-import org.example.mapper.PostMapper;
 import org.example.model.entity.Comment;
 import org.example.model.entity.Post;
 import org.example.repository.CommentRepository;
 import org.example.repository.PostRepository;
 import org.example.service.PostService;
 import org.example.util.PgConnectUtil;
-import org.mapstruct.factory.Mappers;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -22,7 +20,7 @@ import java.sql.Statement;
 //todo: maven, docker
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         init();
 
         final CommentRepository commentRepository = new CommentRepository();

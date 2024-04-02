@@ -1,6 +1,15 @@
 package org.example.model.dto;
 
+import lombok.Builder;
+import lombok.Data;
+
 import java.util.List;
 
-public record PostDto(Long id, String title, String content, List<CommentDto> comments) {
+@Builder
+@Data
+public class PostDto {
+    private Long id;
+    private String title;
+    private String content;
+    private List<CommentDto> comments;
 }
