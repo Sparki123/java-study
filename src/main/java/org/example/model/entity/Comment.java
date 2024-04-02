@@ -10,7 +10,7 @@ import java.util.Objects;
 public class Comment {
     private Long id;
     private String author;
-    private String comment;
+    private String text;
     private Long postId;
 
     @Override

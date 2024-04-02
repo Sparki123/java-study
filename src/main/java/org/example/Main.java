@@ -1,18 +1,20 @@
 package org.example;
 
+import org.example.mapper.PostMapper;
 import org.example.model.entity.Comment;
 import org.example.model.entity.Post;
 import org.example.repository.CommentRepository;
 import org.example.repository.PostRepository;
 import org.example.service.PostService;
 import org.example.util.PgConnectUtil;
+import org.mapstruct.factory.Mappers;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
 //todo: junit 5 with databases
-//todo: map struct
+//todo: map struct -- DONE
 
 //todo: jacoco для подсчета покрытия
 //todo: spotbugs-maven-plugin
@@ -42,12 +44,12 @@ public class Main {
 
         commentRepository.save(Comment.builder()
             .author("Author")
-            .comment("Comment")
+            .text("Comment")
             .postId(post1.getId())
             .build());
         commentRepository.save(Comment.builder()
             .author("Author")
-            .comment("Comment")
+            .text("Comment")
             .postId(post1.getId())
             .build());
         final Post postWithComments = postService.getPostWithComments(1L);

@@ -132,7 +132,7 @@ public class PostRepository implements CrudRepository<Post, Long> {
                 while (resultSet.next()) {
                     final Comment comment = Comment.builder()
                         .id(resultSet.getLong(5))
-                        .comment(resultSet.getString("comment"))
+                        .text(resultSet.getString("comment"))
                         .author(resultSet.getString("author"))
                         .postId(post.getId())
                         .build();

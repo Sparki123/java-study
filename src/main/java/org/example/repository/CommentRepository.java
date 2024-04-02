@@ -30,7 +30,7 @@ public class CommentRepository implements CrudRepository<Comment, Long> {
                 Comment comment = Comment.builder()
                     .id(resultSet.getLong("id"))
                     .author(resultSet.getString("author"))
-                    .comment(resultSet.getString("comment"))
+                    .text(resultSet.getString("comment"))
                     .build();
                 comments.add(comment);
             }
@@ -59,7 +59,7 @@ public class CommentRepository implements CrudRepository<Comment, Long> {
                     Comment comment = Comment.builder()
                         .id(resultSet.getLong("id"))
                         .author(resultSet.getString("author"))
-                        .comment(resultSet.getString("comment"))
+                        .text(resultSet.getString("comment"))
                         .build();
                     return Optional.of(comment);
                 }
@@ -85,7 +85,7 @@ public class CommentRepository implements CrudRepository<Comment, Long> {
         try (Connection connection = PgConnectUtil.getConnection();
              PreparedStatement statement = connection.prepareStatement(INSERT_COMMENT_QUERY, PreparedStatement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, comment.getAuthor());
-            statement.setString(2, comment.getComment());
+            statement.setString(2, comment.getText());
             statement.setLong(3, comment.getPostId());
             statement.executeUpdate();
             connection.commit();
@@ -106,7 +106,7 @@ public class CommentRepository implements CrudRepository<Comment, Long> {
         try (Connection connection = PgConnectUtil.getConnection();
              PreparedStatement statement = connection.prepareStatement(UPDATE_COMMENT_QUERY)) {
             statement.setString(1, comment.getAuthor());
-            statement.setString(2, comment.getComment());
+            statement.setString(2, comment.getText());
             statement.setLong(3, comment.getId());
 //            statement.setLong(4, comment.getPostId());
 
