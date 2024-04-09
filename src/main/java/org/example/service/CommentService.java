@@ -16,27 +16,27 @@ public class CommentService {
     private final CommentMapper commentMapper = Mappers.getMapper(CommentMapper.class);
 
     public List<CommentDto> getAllComments() {
-        List<CommentEntity> commentEntities = commentRepository.findAll();
-        return commentEntities.stream()
+        return commentRepository.findAll().stream()
             .map(commentMapper::toCommentDto)
             .toList();
     }
 
     public Optional<CommentDto> getCommentById(Long id) {
-        Optional<CommentEntity> commentEntity = commentRepository.findById(id);
-        return commentEntity.map(commentMapper::toCommentDto);
+        return commentRepository.findById(id)
+            .map(commentMapper::toCommentDto);
     }
 
     public List<CommentDto> getCommentByPostId(Long id) {
-        List<CommentEntity> commentEntities = commentRepository.findByPostId(id);
-        return commentEntities.stream()
+        return commentRepository.findByPostId(id).stream()
             .map(commentMapper::toCommentDto)
             .toList();
     }
 
-    public CommentDto saveComment(CommentDto commentDto) {
-        CommentEntity commentEntity = commentMapper.toComment(commentDto);
-        return commentMapper.toCommentDto(commentRepository.save(commentEntity));
+    public CommentDto saveComment(final CommentDto commentDto) {
+        final CommentEntity commentEntity = commentMapper.toComment(commentDto);
+        commentRepository.save(commentEntity);
+
+        return commentMapper.toCommentDto(commentEntity);
     }
 
     public void deleteCommentById(Long id) {

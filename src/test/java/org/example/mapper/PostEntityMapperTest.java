@@ -12,7 +12,6 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-
 class PostEntityMapperTest {
 
     private final PostMapper postMapper = Mappers.getMapper(PostMapper.class);

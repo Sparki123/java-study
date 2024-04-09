@@ -11,7 +11,7 @@ public class Main {
         init();
     }
 
-    private static void init() {
+    public static void init() {
         try (final Connection connection = PgConnectUtil.getConnection();
              final Statement statement = connection.createStatement()) {
             final String createPostTable = """

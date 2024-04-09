@@ -1,6 +1,5 @@
 package org.example.repository;
 
-import org.example.model.entity.CommentEntity;
 import org.example.model.entity.PostEntity;
 import org.example.util.PgConnectUtil;
 
@@ -18,7 +17,6 @@ public class PostRepository implements CrudRepository<PostEntity, Long> {
     public static final String INSERT_POST_QUERY = "INSERT INTO posts (title, content) VALUES (?, ?)";
     public static final String UPDATE_POST_QUERY = "UPDATE posts SET title = ?, content = ? WHERE id = ?";
     public static final String SELECT_ALL_POSTS = "SELECT * FROM posts";
-    public static final String SELECT_POST_WITH_COMMENTS = "SELECT * FROM posts LEFT JOIN comments ON posts.id = comments.post_id  WHERE posts.id = ?";
     private static final String POST_BY_ID_QUERY = "SELECT * FROM posts WHERE id = ?";
     private static final String DELETE_POST_QUERY = "DELETE FROM posts WHERE id = ?";
 
@@ -121,7 +119,6 @@ public class PostRepository implements CrudRepository<PostEntity, Long> {
              final Statement statement = connection.createStatement()) {
             final String deleteComments = "DELETE FROM posts";
             statement.executeUpdate(deleteComments);
-
 
             connection.commit();
         } catch (SQLException e) {

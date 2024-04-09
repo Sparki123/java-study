@@ -1,14 +1,11 @@
 package org.example.service;
 
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.example.mapper.PostMapper;
 import org.example.model.dto.CommentDto;
 import org.example.model.dto.PostDto;
 import org.example.model.entity.PostEntity;
 import org.example.repository.PostRepository;
-import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,38 +14,38 @@ import java.util.Optional;
 public class PostService {
     private final PostRepository postRepository;
     private final CommentService commentService;
-    private final PostMapper postMapper = Mappers.getMapper(PostMapper.class);
+    private final PostMapper postMapper;
 
     public List<PostDto> getAllPosts() {
-        List<PostEntity> postEntities = postRepository.findAll();
-        return postEntities.stream()
+        return postRepository.findAll().stream()
             .map(postMapper::toPostDto)
             .toList();
     }
 
-    public Optional<PostDto> getPostById(Long id) {
-        Optional<PostEntity> postEntityOptional = postRepository.findById(id);
+    public Optional<PostDto> getPostById(final Long id) {
+        final Optional<PostEntity> postEntityOptional = postRepository.findById(id);
         return postEntityOptional.map(postMapper::toPostDto);
     }
 
-    public PostDto savePost(PostDto postDto) {
-        PostEntity postEntity = postMapper.toEntityPost(postDto);
-        return postMapper.toPostDto(postRepository.save(postEntity));
+    public PostDto savePost(final PostDto postDto) {
+        final PostEntity postEntity = postMapper.toEntityPost(postDto);
+        postRepository.save(postEntity);
+        return postMapper.toPostDto(postEntity);
     }
 
-    public void deletePostById(Long id) {
+    public void deletePostById(final Long id) {
         postRepository.deleteById(id);
     }
 
-    public Optional<PostDto> getPostWithComments(Long id) {
-        Optional<PostEntity> postEntity = postRepository.findById(id);
+    public PostDto getPostWithComments(final Long id) {
+        final PostEntity postEntity = postRepository.findById(id)
+            .orElseThrow(() -> new IllegalStateException("Post with id %s not found".formatted(id)));
 
-        if (postEntity.isPresent()) {
-            PostDto post = postMapper.toPostDto(postEntity.get());
-            post.setComments(commentService.getCommentByPostId(id));
-            return Optional.of(post);
-        }
+        final List<CommentDto> comments = commentService.getCommentByPostId(id);
 
-        return Optional.empty();
+        final PostDto post = postMapper.toPostDto(postEntity);
+//        postMapper.updateWithComments(post, comments);
+
+        return post;
     }
 }

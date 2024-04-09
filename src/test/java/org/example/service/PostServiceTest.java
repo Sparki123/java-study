@@ -2,25 +2,12 @@ package org.example.service;
 
 import org.example.model.dto.CommentDto;
 import org.example.model.dto.PostDto;
-import org.example.repository.CommentRepository;
-import org.example.repository.PostRepository;
-import org.junit.jupiter.api.BeforeEach;
+import org.example.support.IntegrationTestBase;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class PostServiceTest {
-
-    private final CommentRepository commentRepository = new CommentRepository();
-    private final PostRepository postRepository = new PostRepository();
-
-    private final CommentService commentService = new CommentService(commentRepository);
-    private final PostService postService = new PostService(postRepository, commentService);
-
-    @BeforeEach
-    void setUp() {
-        postRepository.deleteAll();
-    }
+class PostServiceTest extends IntegrationTestBase {
 
     @Test
     void savePost() {
@@ -57,16 +44,17 @@ class PostServiceTest {
             .build());
         postService.deletePostById(postDto.getId());
 
-        assertThat(postService.getPostById(postDto.getId())).isEmpty();
+        assertThat(postService.getPostById(postDto.getId()))
+            .isEmpty();
     }
 
     @Test
     void getAllPosts() {
-        final PostDto postDto = postService.savePost(PostDto.builder()
+        postService.savePost(PostDto.builder()
             .title("Test")
             .content("Test")
             .build());
-        final PostDto postDto2 = postService.savePost(PostDto.builder()
+        postService.savePost(PostDto.builder()
             .title("Test")
             .content("Test")
             .build());
@@ -77,7 +65,7 @@ class PostServiceTest {
     }
 
     @Test
-    void getPostWithComments() {
+    void getPostWithCommentsShouldSuccess() {
         final PostDto postDto = postService.savePost(PostDto.builder()
             .title("Test")
             .content("Test")
@@ -92,15 +80,18 @@ class PostServiceTest {
             .text("test")
             .postId(postDto.getId())
             .build());
-        final PostDto postDto1 = postService.getPostWithComments(postDto.getId()).get();
+        final PostDto actualResult = postService.getPostWithComments(postDto.getId());
 
-        assertThat(postService.getPostById(postDto1.getId())).isNotEmpty();
-        assertThat(postDto1.getComments()).isNotEmpty().hasSize(2);
+        assertThat(postService.getPostById(actualResult.getId()))
+            .isNotEmpty();
+        assertThat(actualResult.getComments())
+            .isNotEmpty()
+            .hasSize(2);
     }
 
     @Test
-    void getEmptyPostWithComments() {
-        assertThat(postService.getPostWithComments(1L)).isEmpty();
+    void getPostWithCommentsShouldReturnExceptionWhenNotExist() {
+        assertThat(postService.getPostWithComments(1L));
     }
 
     @Test
