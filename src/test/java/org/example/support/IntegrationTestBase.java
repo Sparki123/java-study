@@ -2,8 +2,8 @@ package org.example.support;
 
 import org.example.Main;
 import org.example.mapper.PostMapper;
-import org.example.repository.CommentRepository;
-import org.example.repository.PostRepository;
+import org.example.repository.jdbc.CommentRepository;
+import org.example.repository.jdbc.PostRepository;
 import org.example.service.CommentService;
 import org.example.service.PostService;
 import org.junit.jupiter.api.BeforeAll;

@@ -5,7 +5,7 @@ import org.example.mapper.PostMapper;
 import org.example.model.dto.CommentDto;
 import org.example.model.dto.PostDto;
 import org.example.model.entity.PostEntity;
-import org.example.repository.PostRepository;
+import org.example.repository.jdbc.PostRepository;
 
 import java.util.List;
 import java.util.Optional;

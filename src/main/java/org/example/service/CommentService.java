@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.mapper.CommentMapper;
 import org.example.model.dto.CommentDto;
 import org.example.model.entity.CommentEntity;
-import org.example.repository.CommentRepository;
+import org.example.repository.jdbc.CommentRepository;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;

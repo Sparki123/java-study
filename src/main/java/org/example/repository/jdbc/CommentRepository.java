@@ -1,4 +1,4 @@
-package org.example.repository;
+package org.example.repository.jdbc;
 
 import org.example.model.entity.CommentEntity;
 import org.example.util.PgConnectUtil;
