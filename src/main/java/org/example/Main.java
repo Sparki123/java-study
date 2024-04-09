@@ -15,7 +15,7 @@ public class Main {
         try (final Connection connection = PgConnectUtil.getConnection();
              final Statement statement = connection.createStatement()) {
             final String createPostTable = """
-                                    CREATE TABLE IF NOT EXISTS postEntities
+                                    CREATE TABLE IF NOT EXISTS posts
                                     (
                                         id         SERIAL PRIMARY KEY,
                                         title      VARCHAR(255),
@@ -26,12 +26,12 @@ public class Main {
             statement.execute(createPostTable);
 
             final String createCommentTable = """
-                                    CREATE TABLE IF NOT EXISTS commentEntities
+                                    CREATE TABLE IF NOT EXISTS comments
                                     (
                                         id         SERIAL PRIMARY KEY,
                                         post_id    INT REFERENCES postEntities (id) ON DELETE CASCADE,
                                         author     VARCHAR(100),
-                                        commentEntity    TEXT,
+                                        comment    TEXT,
                                         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                                     );
                 """;
