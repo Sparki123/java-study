@@ -7,7 +7,7 @@ import java.util.Objects;
 
 @Data
 @Builder
-public class Comment {
+public class CommentEntity {
     private Long id;
     private String author;
     private String text;
@@ -21,8 +21,8 @@ public class Comment {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        final Comment comment = (Comment) o;
-        return Objects.equals(id, comment.id);
+        final CommentEntity commentEntity = (CommentEntity) o;
+        return Objects.equals(id, commentEntity.id);
     }
 
     @Override

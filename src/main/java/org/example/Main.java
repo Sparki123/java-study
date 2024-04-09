@@ -1,65 +1,21 @@
 package org.example;
 
-import org.example.model.entity.Comment;
-import org.example.model.entity.Post;
-import org.example.repository.CommentRepository;
-import org.example.repository.PostRepository;
-import org.example.service.PostService;
 import org.example.util.PgConnectUtil;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-//todo: junit 5 with databases
-//todo: map struct -- DONE
-
-//todo: jacoco для подсчета покрытия
-//todo: spotbugs-maven-plugin
-
-//todo: maven, docker
-
 public class Main {
     public static void main(final String[] args) {
         init();
-
-        final CommentRepository commentRepository = new CommentRepository();
-        final PostRepository postRepository = new PostRepository();
-
-        final PostService postService = new PostService(postRepository);
-
-        final Post post1 = Post.builder()
-            .title("Title")
-            .content("Content")
-            .build();
-        final Post post2 = Post.builder()
-            .title("Title")
-            .content("Content")
-            .build();
-
-        postService.save(post1);
-        postService.save(post2);
-
-        commentRepository.save(Comment.builder()
-            .author("Author")
-            .text("Comment")
-            .postId(post1.getId())
-            .build());
-        commentRepository.save(Comment.builder()
-            .author("Author")
-            .text("Comment")
-            .postId(post1.getId())
-            .build());
-        final Post postWithComments = postService.getPostWithComments(1L);
-
-        System.out.println(postWithComments);
     }
 
     private static void init() {
         try (final Connection connection = PgConnectUtil.getConnection();
              final Statement statement = connection.createStatement()) {
             final String createPostTable = """
-                                    CREATE TABLE IF NOT EXISTS posts
+                                    CREATE TABLE IF NOT EXISTS postEntities
                                     (
                                         id         SERIAL PRIMARY KEY,
                                         title      VARCHAR(255),
@@ -70,12 +26,12 @@ public class Main {
             statement.execute(createPostTable);
 
             final String createCommentTable = """
-                                    CREATE TABLE IF NOT EXISTS comments
+                                    CREATE TABLE IF NOT EXISTS commentEntities
                                     (
                                         id         SERIAL PRIMARY KEY,
-                                        post_id    INT REFERENCES posts (id) ON DELETE CASCADE,
+                                        post_id    INT REFERENCES postEntities (id) ON DELETE CASCADE,
                                         author     VARCHAR(100),
-                                        comment    TEXT,
+                                        commentEntity    TEXT,
                                         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                                     );
                 """;

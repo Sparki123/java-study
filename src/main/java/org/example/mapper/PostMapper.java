@@ -1,10 +1,9 @@
 package org.example.mapper;
 
 import org.example.model.dto.PostDto;
-import org.example.model.entity.Post;
+import org.example.model.entity.PostEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.Named;
 
 import java.util.List;
 
@@ -15,15 +14,14 @@ import java.util.List;
 public interface PostMapper {
 
     @Mapping(target = "id", source = "id")
-    @Mapping(target = "title", source = ".", qualifiedByName = "toTitle")
+    @Mapping(target = "title", source = "title")
     @Mapping(target = "content", source = "content")
-    @Mapping(target = "comments", expression = "java(List.of())")
-    PostDto toPostDto(Post post);
+    @Mapping(target = "comments", source = "comments")
+    PostDto toPostDto(PostEntity postEntity);
 
-    @Named("toTitle")
-    default String toTitle(Post post) {
-        return "Title: " + post.getTitle() + " " + post.getId();
-    }
-
-    Post toEntityPost(PostDto postDto);
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "title", source = "title")
+    @Mapping(target = "content", source = "content")
+    @Mapping(target = "comments", source = "comments")
+    PostEntity toEntityPost(PostDto postDto);
 }

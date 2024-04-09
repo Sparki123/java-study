@@ -1,6 +1,6 @@
 package org.example.repository;
 
-import org.example.model.entity.Comment;
+import org.example.model.entity.CommentEntity;
 import org.example.util.PgConnectUtil;
 
 import java.sql.Connection;
@@ -12,62 +12,83 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class CommentRepository implements CrudRepository<Comment, Long> {
+public class CommentRepository implements CrudRepository<CommentEntity, Long> {
 
     public static final String SELECT_ALL_COMMENTS = "SELECT * FROM comments";
     private static final String INSERT_COMMENT_QUERY = "INSERT INTO comments (author, comment, post_id) VALUES (?, ?, ?)";
     private static final String UPDATE_COMMENT_QUERY = "UPDATE comments SET author = ?, comment = ? WHERE id = ?";
     private static final String DELETE_COMMENT_QUERY = "DELETE FROM comments WHERE id = ?";
     private static final String FIND_BY_ID_QUERY = "SELECT * FROM comments WHERE id = ?";
+    private static final String FIND_BY_POST_ID_QUERY = "SELECT * FROM comments WHERE post_id = ?";
 
     @Override
-    public List<Comment> findAll() {
-        List<Comment> comments = new ArrayList<>();
+    public List<CommentEntity> findAll() {
+        List<CommentEntity> commentEntities = new ArrayList<>();
         try (Connection connection = PgConnectUtil.getConnection();
              Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(SELECT_ALL_COMMENTS)) {
             while (resultSet.next()) {
-                Comment comment = Comment.builder()
+                CommentEntity commentEntity = CommentEntity.builder()
                     .id(resultSet.getLong("id"))
                     .author(resultSet.getString("author"))
                     .text(resultSet.getString("comment"))
                     .build();
-                comments.add(comment);
+                commentEntities.add(commentEntity);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return comments;
+        return commentEntities;
     }
 
     @Override
-    public Comment save(final Comment comment) {
-        if (comment.getId() == null) {
-            return insert(comment);
+    public CommentEntity save(final CommentEntity commentEntity) {
+        if (commentEntity.getId() == null) {
+            return insert(commentEntity);
         } else {
-            return update(comment);
+            return update(commentEntity);
         }
     }
 
     @Override
-    public Optional<Comment> findById(Long id) {
+    public Optional<CommentEntity> findById(Long id) {
         try (Connection connection = PgConnectUtil.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_BY_ID_QUERY)) {
             statement.setLong(1, id);
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
-                    Comment comment = Comment.builder()
+                    CommentEntity commentEntity = CommentEntity.builder()
                         .id(resultSet.getLong("id"))
                         .author(resultSet.getString("author"))
                         .text(resultSet.getString("comment"))
+                        .postId(resultSet.getLong("post_id"))
                         .build();
-                    return Optional.of(comment);
+                    return Optional.of(commentEntity);
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return Optional.empty();
+    }
+
+    public List<CommentEntity> findByPostId(Long id) {
+        List<CommentEntity> commentEntities = new ArrayList<>();
+        try (Connection connection = PgConnectUtil.getConnection();
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(FIND_BY_POST_ID_QUERY)) {
+            while (resultSet.next()) {
+                CommentEntity commentEntity = CommentEntity.builder()
+                    .id(resultSet.getLong("id"))
+                    .author(resultSet.getString("author"))
+                    .text(resultSet.getString("comment"))
+                    .build();
+                commentEntities.add(commentEntity);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return commentEntities;
     }
 
     @Override
@@ -81,17 +102,17 @@ public class CommentRepository implements CrudRepository<Comment, Long> {
         }
     }
 
-    private Comment insert(final Comment comment) {
+    private CommentEntity insert(final CommentEntity commentEntity) {
         try (Connection connection = PgConnectUtil.getConnection();
              PreparedStatement statement = connection.prepareStatement(INSERT_COMMENT_QUERY, PreparedStatement.RETURN_GENERATED_KEYS)) {
-            statement.setString(1, comment.getAuthor());
-            statement.setString(2, comment.getText());
-            statement.setLong(3, comment.getPostId());
+            statement.setString(1, commentEntity.getAuthor());
+            statement.setString(2, commentEntity.getText());
+            statement.setLong(3, commentEntity.getPostId());
             statement.executeUpdate();
             connection.commit();
             try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
-                    comment.setId(generatedKeys.getLong(1));
+                    commentEntity.setId(generatedKeys.getLong(1));
                 } else {
                     throw new SQLException("Ошибка при получении сгенерированного ключа.");
                 }
@@ -99,21 +120,34 @@ public class CommentRepository implements CrudRepository<Comment, Long> {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return comment;
+        return commentEntity;
     }
 
-    private Comment update(final Comment comment) {
+    private CommentEntity update(final CommentEntity commentEntity) {
         try (Connection connection = PgConnectUtil.getConnection();
              PreparedStatement statement = connection.prepareStatement(UPDATE_COMMENT_QUERY)) {
-            statement.setString(1, comment.getAuthor());
-            statement.setString(2, comment.getText());
-            statement.setLong(3, comment.getId());
-//            statement.setLong(4, comment.getPostId());
+            statement.setString(1, commentEntity.getAuthor());
+            statement.setString(2, commentEntity.getText());
+            statement.setLong(3, commentEntity.getId());
 
             statement.executeUpdate();
+            connection.commit();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return comment;
+        return commentEntity;
+    }
+
+    public void deleteAll() {
+        try (final Connection connection = PgConnectUtil.getConnection();
+             final Statement statement = connection.createStatement()) {
+            final String deleteComments = "DELETE FROM comments";
+            statement.executeUpdate(deleteComments);
+
+
+            connection.commit();
+        } catch (SQLException e) {
+            throw new IllegalStateException(e);
+        }
     }
 }

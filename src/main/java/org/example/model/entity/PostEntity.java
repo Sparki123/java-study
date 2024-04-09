@@ -9,12 +9,12 @@ import java.util.Objects;
 
 @Data
 @Builder
-public class Post {
+public class PostEntity {
     private Long id;
     private String title;
     private String content;
     @Builder.Default
-    private List<Comment> comments = new ArrayList<>();
+    private List<CommentEntity> comments = new ArrayList<>();
 
     @Override
     public boolean equals(final Object o) {
@@ -24,8 +24,8 @@ public class Post {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        final Post post = (Post) o;
-        return Objects.equals(id, post.id);
+        final PostEntity postEntity = (PostEntity) o;
+        return Objects.equals(id, postEntity.id);
     }
 
     @Override
