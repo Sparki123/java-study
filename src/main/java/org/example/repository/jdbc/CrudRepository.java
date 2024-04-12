@@ -3,14 +3,14 @@ package org.example.repository.jdbc;
 import java.util.List;
 import java.util.Optional;
 
-@SuppressWarnings("java:S119")
+@SuppressWarnings("all")
 public interface CrudRepository<T, ID> {
     List<T> findAll();
 
-    T save(final T post);
+    T save(T post);
 
-    Optional<T> findById(final ID id);
+    Optional<T> findById(ID id);
 
-    void deleteById(final ID id);
+    void deleteById(ID id);
 
 }

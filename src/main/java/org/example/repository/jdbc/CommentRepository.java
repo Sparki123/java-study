@@ -23,16 +23,16 @@ public class CommentRepository implements CrudRepository<CommentEntity, Long> {
 
     @Override
     public List<CommentEntity> findAll() {
-        List<CommentEntity> commentEntities = new ArrayList<>();
+        final List<CommentEntity> commentEntities = new ArrayList<>();
         try (Connection connection = PgConnectUtil.getConnection();
              Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(SELECT_ALL_COMMENTS)) {
             while (resultSet.next()) {
-                CommentEntity commentEntity = CommentEntity.builder()
-                    .id(resultSet.getLong("id"))
-                    .author(resultSet.getString("author"))
-                    .text(resultSet.getString("comment"))
-                    .build();
+                final CommentEntity commentEntity = CommentEntity.builder()
+                        .id(resultSet.getLong("id"))
+                        .author(resultSet.getString("author"))
+                        .text(resultSet.getString("comment"))
+                        .build();
                 commentEntities.add(commentEntity);
             }
         } catch (SQLException e) {
@@ -51,18 +51,18 @@ public class CommentRepository implements CrudRepository<CommentEntity, Long> {
     }
 
     @Override
-    public Optional<CommentEntity> findById(Long id) {
+    public Optional<CommentEntity> findById(final Long id) {
         try (Connection connection = PgConnectUtil.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_BY_ID_QUERY)) {
             statement.setLong(1, id);
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
-                    CommentEntity commentEntity = CommentEntity.builder()
-                        .id(resultSet.getLong("id"))
-                        .author(resultSet.getString("author"))
-                        .text(resultSet.getString("comment"))
-                        .postId(resultSet.getLong("post_id"))
-                        .build();
+                    final CommentEntity commentEntity = CommentEntity.builder()
+                            .id(resultSet.getLong("id"))
+                            .author(resultSet.getString("author"))
+                            .text(resultSet.getString("comment"))
+                            .postId(resultSet.getLong("post_id"))
+                            .build();
                     return Optional.of(commentEntity);
                 }
             }
@@ -72,18 +72,20 @@ public class CommentRepository implements CrudRepository<CommentEntity, Long> {
         return Optional.empty();
     }
 
-    public List<CommentEntity> findByPostId(Long id) {
-        List<CommentEntity> commentEntities = new ArrayList<>();
+    public List<CommentEntity> findByPostId(final Long id) {
+        final List<CommentEntity> commentEntities = new ArrayList<>();
         try (Connection connection = PgConnectUtil.getConnection();
-             Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery(FIND_BY_POST_ID_QUERY)) {
-            while (resultSet.next()) {
-                CommentEntity commentEntity = CommentEntity.builder()
-                    .id(resultSet.getLong("id"))
-                    .author(resultSet.getString("author"))
-                    .text(resultSet.getString("comment"))
-                    .build();
-                commentEntities.add(commentEntity);
+             PreparedStatement statement = connection.prepareStatement(FIND_BY_POST_ID_QUERY)) {
+            statement.setLong(1, id);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    final CommentEntity commentEntity = CommentEntity.builder()
+                            .id(resultSet.getLong("id"))
+                            .author(resultSet.getString("author"))
+                            .text(resultSet.getString("comment"))
+                            .build();
+                    commentEntities.add(commentEntity);
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -92,7 +94,7 @@ public class CommentRepository implements CrudRepository<CommentEntity, Long> {
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(final Long id) {
         try (Connection connection = PgConnectUtil.getConnection();
              PreparedStatement statement = connection.prepareStatement(DELETE_COMMENT_QUERY)) {
             statement.setLong(1, id);
@@ -139,11 +141,10 @@ public class CommentRepository implements CrudRepository<CommentEntity, Long> {
     }
 
     public void deleteAll() {
-        try (final Connection connection = PgConnectUtil.getConnection();
-             final Statement statement = connection.createStatement()) {
+        try (Connection connection = PgConnectUtil.getConnection();
+             Statement statement = connection.createStatement()) {
             final String deleteComments = "DELETE FROM comments";
             statement.executeUpdate(deleteComments);
-
 
             connection.commit();
         } catch (SQLException e) {

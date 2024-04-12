@@ -1,11 +1,9 @@
 package org.example.mapper;
 
-import org.example.model.dto.CommentDto;
 import org.example.model.dto.PostDto;
 import org.example.model.entity.PostEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
 
 import java.util.List;
 

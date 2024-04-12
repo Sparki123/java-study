@@ -17,19 +17,19 @@ public class CommentService {
 
     public List<CommentDto> getAllComments() {
         return commentRepository.findAll().stream()
-            .map(commentMapper::toCommentDto)
-            .toList();
+                .map(commentMapper::toCommentDto)
+                .toList();
     }
 
-    public Optional<CommentDto> getCommentById(Long id) {
+    public Optional<CommentDto> getCommentById(final Long id) {
         return commentRepository.findById(id)
-            .map(commentMapper::toCommentDto);
+                .map(commentMapper::toCommentDto);
     }
 
-    public List<CommentDto> getCommentByPostId(Long id) {
+    public List<CommentDto> getCommentByPostId(final Long id) {
         return commentRepository.findByPostId(id).stream()
-            .map(commentMapper::toCommentDto)
-            .toList();
+                .map(commentMapper::toCommentDto)
+                .toList();
     }
 
     public CommentDto saveComment(final CommentDto commentDto) {
@@ -39,7 +39,7 @@ public class CommentService {
         return commentMapper.toCommentDto(commentEntity);
     }
 
-    public void deleteCommentById(Long id) {
+    public void deleteCommentById(final Long id) {
         commentRepository.deleteById(id);
     }
 }

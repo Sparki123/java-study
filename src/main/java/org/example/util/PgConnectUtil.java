@@ -9,13 +9,13 @@ import java.util.Properties;
 
 @UtilityClass
 public class PgConnectUtil {
-    private static final String url = "jdbc:postgresql://localhost:5432/study-habr";
-    private static final String username = "user";
-    private static final String password = "user";
+    private static final String URL = "jdbc:postgresql://localhost:5432/study-habr";
+    private static final String USER_NAME = "user";
+    private static final String PASSWORD = "user";
 
     public static Connection getConnection() {
         try {
-            final Connection connection = DriverManager.getConnection(url, getProperties());
+            final Connection connection = DriverManager.getConnection(URL, getProperties());
             connection.setAutoCommit(false);
             return connection;
         } catch (SQLException e) {
@@ -24,9 +24,9 @@ public class PgConnectUtil {
     }
 
     private static Properties getProperties() {
-        Properties props = new Properties();
-        props.setProperty("user", username);
-        props.setProperty("password", password);
+        final Properties props = new Properties();
+        props.setProperty("user", USER_NAME);
+        props.setProperty("password", PASSWORD);
         return props;
     }
 }

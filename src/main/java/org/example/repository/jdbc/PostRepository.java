@@ -22,16 +22,16 @@ public class PostRepository implements CrudRepository<PostEntity, Long> {
 
     @Override
     public List<PostEntity> findAll() {
-        List<PostEntity> postEntities = new ArrayList<>();
+        final List<PostEntity> postEntities = new ArrayList<>();
         try (Connection connection = PgConnectUtil.getConnection();
              Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(SELECT_ALL_POSTS)) {
             while (resultSet.next()) {
-                PostEntity postEntity = PostEntity.builder()
-                    .id(resultSet.getLong("id"))
-                    .title(resultSet.getString("title"))
-                    .content(resultSet.getString("content"))
-                    .build();
+                final PostEntity postEntity = PostEntity.builder()
+                        .id(resultSet.getLong("id"))
+                        .title(resultSet.getString("title"))
+                        .content(resultSet.getString("content"))
+                        .build();
                 postEntities.add(postEntity);
             }
         } catch (SQLException e) {
@@ -57,7 +57,7 @@ public class PostRepository implements CrudRepository<PostEntity, Long> {
             statement.executeUpdate();
             connection.commit();
 
-            ResultSet rs = statement.getGeneratedKeys();
+            final ResultSet rs = statement.getGeneratedKeys();
             if (rs.next()) {
                 postEntity.setId(rs.getLong(1));
             }
@@ -87,14 +87,14 @@ public class PostRepository implements CrudRepository<PostEntity, Long> {
         try (Connection connection = PgConnectUtil.getConnection();
              PreparedStatement statement = connection.prepareStatement(POST_BY_ID_QUERY)) {
             statement.setLong(1, id);
-            ResultSet resultSet = statement.executeQuery();
+            final ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 return Optional.of(
-                    PostEntity.builder()
-                        .id(resultSet.getLong("id"))
-                        .title(resultSet.getString("title"))
-                        .content(resultSet.getString("content"))
-                        .build());
+                        PostEntity.builder()
+                                .id(resultSet.getLong("id"))
+                                .title(resultSet.getString("title"))
+                                .content(resultSet.getString("content"))
+                                .build());
             }
             return Optional.empty();
         } catch (SQLException e) {
@@ -103,7 +103,7 @@ public class PostRepository implements CrudRepository<PostEntity, Long> {
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(final Long id) {
         try (Connection connection = PgConnectUtil.getConnection();
              PreparedStatement statement = connection.prepareStatement(DELETE_POST_QUERY)) {
             statement.setLong(1, id);
@@ -115,8 +115,8 @@ public class PostRepository implements CrudRepository<PostEntity, Long> {
     }
 
     public void deleteAll() {
-        try (final Connection connection = PgConnectUtil.getConnection();
-             final Statement statement = connection.createStatement()) {
+        try (Connection connection = PgConnectUtil.getConnection();
+             Statement statement = connection.createStatement()) {
             final String deleteComments = "DELETE FROM posts";
             statement.executeUpdate(deleteComments);
 

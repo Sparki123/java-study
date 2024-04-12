@@ -12,8 +12,8 @@ public class Main {
     }
 
     public static void init() {
-        try (final Connection connection = PgConnectUtil.getConnection();
-             final Statement statement = connection.createStatement()) {
+        try (Connection connection = PgConnectUtil.getConnection();
+             Statement statement = connection.createStatement()) {
             final String createPostTable = """
                                     CREATE TABLE IF NOT EXISTS posts
                                     (

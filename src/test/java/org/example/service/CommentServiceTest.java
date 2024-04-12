@@ -21,11 +21,11 @@ public class CommentServiceTest extends IntegrationTestBase {
             .postId(postDto.getId())
             .build());
 
-//        commentService.getCommentById(commentDto.getId())
-//            .ifPresent(
-//                v -> assertThat(v).usingRecursiveComparison()
-//                    .isEqualTo(commentDto)
-//            );
+        commentService.getCommentById(commentDto.getId())
+            .ifPresent(
+                v -> assertThat(v).usingRecursiveComparison()
+                    .isEqualTo(commentDto)
+            );
     }
 
     @Test
