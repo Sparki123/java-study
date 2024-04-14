@@ -8,7 +8,6 @@ import org.example.repository.jdbc.CommentRepository;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 public class CommentService {
@@ -21,9 +20,10 @@ public class CommentService {
                 .toList();
     }
 
-    public Optional<CommentDto> getCommentById(final Long id) {
-        return commentRepository.findById(id)
-                .map(commentMapper::toCommentDto);
+    public CommentDto getCommentById(final Long id) {
+        final CommentEntity comment = commentRepository.findById(id)
+                .orElseThrow(() -> new IllegalStateException("Comment with id %s not found".formatted(id)));
+        return commentMapper.toCommentDto(comment);
     }
 
     public List<CommentDto> getCommentByPostId(final Long id) {

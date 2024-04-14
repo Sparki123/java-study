@@ -31,6 +31,7 @@ public class PostRepository implements CrudRepository<PostEntity, Long> {
                         .id(resultSet.getLong("id"))
                         .title(resultSet.getString("title"))
                         .content(resultSet.getString("content"))
+                        .comments(new ArrayList<>())
                         .build();
                 postEntities.add(postEntity);
             }

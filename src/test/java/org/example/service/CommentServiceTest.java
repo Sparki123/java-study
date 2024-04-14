@@ -1,117 +1,114 @@
 package org.example.service;
 
 import org.example.model.dto.CommentDto;
-import org.example.model.dto.PostDto;
+import org.example.model.entity.CommentEntity;
+import org.example.model.entity.PostEntity;
 import org.example.support.IntegrationTestBase;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatException;
 
-public class CommentServiceTest extends IntegrationTestBase {
+class CommentServiceTest extends IntegrationTestBase {
 
     @Test
-    void saveComment() {
-        final PostDto postDto = postService.savePost(PostDto.builder()
-            .title("Test")
-            .content("Test")
-            .build());
+    void saveCommentShouldSuccess() {
+        final PostEntity postDto = postRepository.save(PostEntity.builder()
+                .title("Test")
+                .content("Test")
+                .build());
         final CommentDto commentDto = commentService.saveComment(CommentDto.builder()
-            .text("Test")
-            .author("Test")
-            .postId(postDto.getId())
-            .build());
+                .text("Test")
+                .author("Test")
+                .postId(postDto.getId())
+                .build());
 
-        commentService.getCommentById(commentDto.getId())
-            .ifPresent(
-                v -> assertThat(v).usingRecursiveComparison()
-                    .isEqualTo(commentDto)
-            );
+        assertThat(commentDto.getId()).isNotNull();
+        assertThat(commentDto).isEqualTo(CommentDto.builder()
+                .id(commentDto.getId())
+                .text("Test")
+                .author("Test")
+                .postId(postDto.getId())
+                .build());
     }
 
     @Test
-    void getById() {
-        final PostDto postDto = postService.savePost(PostDto.builder()
-            .title("Test")
-            .content("Test")
-            .build());
-        final CommentDto commentDto = commentService.saveComment(CommentDto.builder()
-            .text("Test")
-            .author("Test")
-            .postId(postDto.getId())
-            .build());
-        commentService.getCommentById(commentDto.getId())
-            .ifPresent(
-                v -> assertThat(v).usingRecursiveComparison()
-                    .isEqualTo(commentDto)
-            );
+    void getByIdShouldSuccess() {
+        final PostEntity postDto = postRepository.save(PostEntity.builder()
+                .title("Test")
+                .content("Test")
+                .build());
+        final CommentEntity commentEntity = commentRepository.save(CommentEntity.builder()
+                .text("Test")
+                .author("Test")
+                .postId(postDto.getId())
+                .build());
+        final CommentDto commentById = commentService.getCommentById(commentEntity.getId());
+
+        assertThat(commentById.getId()).isNotNull();
+        assertThat(commentById).isEqualTo(commentMapper.toCommentDto(commentEntity));
+
     }
 
     @Test
-    void deleteCommentById() {
-        final PostDto postDto = postService.savePost(PostDto.builder()
-            .title("Test")
-            .content("Test")
-            .build());
-        final CommentDto commentDto = commentService.saveComment(CommentDto.builder()
-            .text("Test")
-            .author("Test")
-            .postId(postDto.getId())
-            .build());
-        commentService.deleteCommentById(commentDto.getId());
-        assertThat(commentService.getCommentById(commentDto.getId())).isEmpty();
+    void deleteCommentByIdShouldSuccess() {
+        final PostEntity postDto = postRepository.save(PostEntity.builder()
+                .title("Test")
+                .content("Test")
+                .build());
+        final CommentEntity commentEntity = commentRepository.save(CommentEntity.builder()
+                .text("Test")
+                .author("Test")
+                .postId(postDto.getId())
+                .build());
+        commentService.deleteCommentById(commentEntity.getId());
+
+        assertThat(commentRepository.findById(commentEntity.getId())).isEmpty();
     }
 
     @Test
-    void getAllComments() {
-        final PostDto postDto = postService.savePost(PostDto.builder()
-            .title("Test")
-            .content("Test")
-            .build());
-        commentService.saveComment(CommentDto.builder()
-            .text("Test")
-            .author("Test")
-            .postId(postDto.getId())
-            .build());
-        commentService.saveComment(CommentDto.builder()
-            .text("Test")
-            .author("Test")
-            .postId(postDto.getId())
-            .build());
+    void getAllCommentsShouldReturnList() {
+        final PostEntity postDto = postRepository.save(PostEntity.builder()
+                .title("Test")
+                .content("Test")
+                .build());
+        final CommentEntity commentEntity = commentRepository.save(CommentEntity.builder()
+                .text("Test")
+                .author("Test")
+                .postId(postDto.getId())
+                .build());
 
         assertThat(commentService.getAllComments())
-            .isNotEmpty()
-            .hasSize(2);
+                .isNotEmpty()
+                .hasSize(1)
+                .contains(commentMapper.toCommentDto(commentEntity));
     }
 
     @Test
-    void getAllCommentsByPost() {
-        final PostDto postDto = postService.savePost(PostDto.builder()
-            .title("Test")
-            .content("Test")
-            .build());
-        commentService.saveComment(CommentDto.builder()
-            .text("Test")
-            .author("Test")
-            .postId(postDto.getId())
-            .build());
-        commentService.saveComment(CommentDto.builder()
-            .text("Test")
-            .author("Test")
-            .postId(postDto.getId())
-            .build());
+    void getAllCommentsByPostShouldReturnList() {
+        final PostEntity postDto = postRepository.save(PostEntity.builder()
+                .title("Test")
+                .content("Test")
+                .build());
+        final CommentEntity commentEntity = commentRepository.save(CommentEntity.builder()
+                .text("Test")
+                .author("Test")
+                .postId(postDto.getId())
+                .build());
 
         assertThat(commentService.getCommentByPostId(postDto.getId()))
-            .isNotEmpty()
-            .hasSize(2);
+                .isNotEmpty()
+                .hasSize(1)
+                .contains(commentMapper.toCommentDto(commentEntity));
     }
 
     @Test
-    void getEmptyComments() {
-        assertThat(commentService.getCommentById(1L)).isEmpty();
+    void getCommentByIdShouldReturnNull() {
+        assertThatException().isThrownBy(() -> commentService.getCommentById(1L));
     }
 
     @Test
-    void getEmptyPostCommentsById() {
+    void gePostCommentsByIdShouldReturnEmptyList() {
         assertThat(commentService.getCommentByPostId(1L)).isEmpty();
     }
 }

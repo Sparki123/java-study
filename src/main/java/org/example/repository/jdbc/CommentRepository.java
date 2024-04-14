@@ -32,6 +32,7 @@ public class CommentRepository implements CrudRepository<CommentEntity, Long> {
                         .id(resultSet.getLong("id"))
                         .author(resultSet.getString("author"))
                         .text(resultSet.getString("comment"))
+                        .postId(resultSet.getLong("post_id"))
                         .build();
                 commentEntities.add(commentEntity);
             }
@@ -83,6 +84,7 @@ public class CommentRepository implements CrudRepository<CommentEntity, Long> {
                             .id(resultSet.getLong("id"))
                             .author(resultSet.getString("author"))
                             .text(resultSet.getString("comment"))
+                            .postId(resultSet.getLong("post_id"))
                             .build();
                     commentEntities.add(commentEntity);
                 }
@@ -99,6 +101,7 @@ public class CommentRepository implements CrudRepository<CommentEntity, Long> {
              PreparedStatement statement = connection.prepareStatement(DELETE_COMMENT_QUERY)) {
             statement.setLong(1, id);
             statement.executeUpdate();
+            connection.commit();
         } catch (SQLException e) {
             e.printStackTrace();
         }

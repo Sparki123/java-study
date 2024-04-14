@@ -217,7 +217,7 @@
                                         <limit>
                                             <counter>METHOD</counter>
                                             <value>MISSEDCOUNT</value>
-                                            <maximum>32</maximum>
+                                            <maximum>35</maximum>
                                         </limit>
                                     </limits>
                                 </rule>

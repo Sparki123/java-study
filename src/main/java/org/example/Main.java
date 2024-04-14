@@ -7,9 +7,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class Main {
-    public static void main(final String[] args) {
-        init();
-    }
 
     public static void init() {
         try (Connection connection = PgConnectUtil.getConnection();

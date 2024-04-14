@@ -8,7 +8,6 @@ import org.example.model.entity.PostEntity;
 import org.example.repository.jdbc.PostRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 @AllArgsConstructor
 public class PostService {
@@ -18,13 +17,15 @@ public class PostService {
 
     public List<PostDto> getAllPosts() {
         return postRepository.findAll().stream()
-            .map(postMapper::toPostDto)
-            .toList();
+                .map(postMapper::toPostDto)
+                .toList();
     }
 
-    public Optional<PostDto> getPostById(final Long id) {
-        final Optional<PostEntity> postEntityOptional = postRepository.findById(id);
-        return postEntityOptional.map(postMapper::toPostDto);
+    public PostDto getPostById(final Long id) {
+        final PostEntity postEntity = postRepository.findById(id)
+                .orElseThrow(() -> new IllegalStateException("Post with id %s not found".formatted(id)));
+
+        return postMapper.toPostDto(postEntity);
     }
 
     public PostDto savePost(final PostDto postDto) {
@@ -39,12 +40,13 @@ public class PostService {
 
     public PostDto getPostWithComments(final Long id) {
         final PostEntity postEntity = postRepository.findById(id)
-            .orElseThrow(() -> new IllegalStateException("Post with id %s not found".formatted(id)));
+                .orElseThrow(() -> new IllegalStateException("Post with id %s not found".formatted(id)));
 
         final List<CommentDto> comments = commentService.getCommentByPostId(id);
 
         final PostDto post = postMapper.toPostDto(postEntity);
-//        postMapper.updateWithComments(post, comments);
+
+        post.setComments(comments);
 
         return post;
     }
