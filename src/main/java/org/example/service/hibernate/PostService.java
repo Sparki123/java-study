@@ -18,17 +18,17 @@ public class PostService {
         this.postMapper = postMapper;
     }
 
-    public List<PostDto> getAllPosts() {
-        return postHibRepository.findAll().stream().map(postMapper::toPostDto);
-    }
+    //    public List<PostDto> getAllPosts() {
+    //        return postHibRepository.findAll().stream().map(postMapper::toPostDto);
+    //    }
+    //
+    //    public PostDto getPostById(final Long id) {
+    //        return postHibRepository.findById(id);
+    //    }
 
-    public PostDto getPostById(final Long id) {
-        return postHibRepository.findById(id);
-    }
-
-    public PostDto savePost(final PostDto postDto) {
-        return postHibRepository.save(postDto);
-    }
+    //    public PostDto savePost(final PostDto postDto) {
+    //        return postHibRepository.save(postDto);
+    //    }
 
     public void deletePost(final Long id) {
         postHibRepository.deleteById(id);

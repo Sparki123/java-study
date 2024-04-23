@@ -1,6 +1,6 @@
 package org.example;
 
-import org.example.model.hiberentity.Post;
+import org.example.model.hibernate.entity.Post;
 import org.example.util.PgConnectUtil;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -20,7 +20,7 @@ public class Main {
             Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             Post post = Post.builder()
-                    .title("hello_200")
+//                    .title("hello_200")
                     .content("hello_200")
                     .build();
             session.persist(post);

@@ -1,6 +1,6 @@
 package org.example.repository.hibernate;
 
-import org.example.model.hiberentity.Post;
+import org.example.model.hibernate.entity.Post;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;

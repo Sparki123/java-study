@@ -1,6 +1,6 @@
 package org.example.service.hibernate;
 
-import org.example.model.hiberentity.Comment;
+import org.example.model.hibernate.entity.Comment;
 import org.example.repository.hibernate.CommentHibRepository;
 import org.hibernate.SessionFactory;
 
