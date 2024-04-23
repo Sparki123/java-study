@@ -1,4 +1,4 @@
-package org.example.service;
+package org.example.service.jdbc;
 
 import lombok.RequiredArgsConstructor;
 import org.example.mapper.CommentMapper;

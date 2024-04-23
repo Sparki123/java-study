@@ -1,10 +1,11 @@
-package org.example.service;
+package org.example.service.jdbc;
 
 import lombok.AllArgsConstructor;
 import org.example.mapper.PostMapper;
 import org.example.model.dto.CommentDto;
 import org.example.model.dto.PostDto;
 import org.example.model.entity.PostEntity;
+import org.example.repository.hibernate.PostHibRepository;
 import org.example.repository.jdbc.PostRepository;
 
 import java.util.List;
@@ -14,6 +15,7 @@ public class PostService {
     private final PostRepository postRepository;
     private final CommentService commentService;
     private final PostMapper postMapper;
+    private final PostHibRepository postHibRepository;
 
     public List<PostDto> getAllPosts() {
         return postRepository.findAll().stream()

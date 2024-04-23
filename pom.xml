@@ -20,6 +20,7 @@
         <mapstruct.version>1.5.5.Final</mapstruct.version>
         <jacoco.version>0.8.11</jacoco.version>
         <spotbugs.version>4.8.3</spotbugs.version>
+        <hibernate.version>6.4.4.Final</hibernate.version>
 
         <plugins.checkstyle.puppycrawl.version>10.14.0</plugins.checkstyle.puppycrawl.version>
         <plugins.checkstyle.thomasjensen.version>7.0.1</plugins.checkstyle.thomasjensen.version>
@@ -67,10 +68,19 @@
                 <version>${spotbugs.version}</version>
                 <type>pom</type>
             </dependency>
+            <dependency>
+                <groupId>org.hibernate</groupId>
+                <artifactId>hibernate-core</artifactId>
+                <version>${hibernate.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
     <dependencies>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
