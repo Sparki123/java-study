@@ -1,12 +1,12 @@
 package org.example.support;
 
-import org.example.Main;
-import org.example.mapper.CommentMapper;
-import org.example.mapper.PostMapper;
-import org.example.repository.jdbc.CommentRepository;
-import org.example.repository.jdbc.PostRepository;
-import org.example.service.jdbc.CommentService;
-import org.example.service.jdbc.PostService;
+import org.example.jdbc.Main;
+import org.example.jdbc.mapper.CommentMapper;
+import org.example.jdbc.mapper.PostMapper;
+import org.example.jdbc.repository.CommentRepository;
+import org.example.jdbc.repository.PostRepository;
+import org.example.jdbc.service.CommentService;
+import org.example.jdbc.service.PostService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.mapstruct.factory.Mappers;

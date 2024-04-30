@@ -1,10 +1,10 @@
 package org.example.support;
 
 import lombok.experimental.UtilityClass;
-import org.example.model.dto.CommentDto;
-import org.example.model.dto.PostDto;
-import org.example.model.entity.CommentEntity;
-import org.example.model.entity.PostEntity;
+import org.example.jdbc.model.dto.CommentDto;
+import org.example.jdbc.model.dto.PostDto;
+import org.example.jdbc.model.entity.CommentEntity;
+import org.example.jdbc.model.entity.PostEntity;
 
 import java.util.List;
 
