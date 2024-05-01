@@ -2,6 +2,7 @@ package org.example.hibernate.entity;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
@@ -36,6 +37,13 @@ public class Post extends BaseEntity {
 
     @OneToMany(mappedBy = "post", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @Builder.Default
+    @ToString.Exclude
     private List<Comment> comments = new ArrayList<>();
+
+    public Post withComment(Comment comment) {
+        this.comments.add(comment);
+        comment.setPost(this);
+        return this;
+    }
 
 }

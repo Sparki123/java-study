@@ -8,7 +8,6 @@ import org.example.hibernate.entity.Post;
 import java.util.List;
 import java.util.Optional;
 
-
 public class PostHibRepository {
     private final EntityManager entityManager;
 
@@ -24,7 +23,7 @@ public class PostHibRepository {
     public Post save(Post postEntity) {
         EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
-        entityManager.merge(postEntity);
+        entityManager.persist(postEntity);
         transaction.commit();
         return postEntity;
     }

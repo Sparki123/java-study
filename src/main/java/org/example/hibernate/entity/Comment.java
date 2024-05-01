@@ -33,6 +33,7 @@ public class Comment extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id", foreignKey = @ForeignKey(name = "fk_comments_post"))
+    @ToString.Exclude
     private Post post;
 
 }
