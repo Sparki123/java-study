@@ -2,9 +2,11 @@ package org.example.hibernate.service;
 
 import org.example.hibernate.entity.Post;
 import org.example.hibernate.repository.PostHibRepository;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Component
 public class PostService {
     private final PostHibRepository postRepository;
 

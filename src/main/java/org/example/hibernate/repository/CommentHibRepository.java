@@ -4,13 +4,17 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Query;
 import org.example.hibernate.entity.Comment;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
 
+@Component
 public class CommentHibRepository implements CrudRepository<Comment, Long> {
     private final EntityManager entityManager;
 
+    //Можно указывать бин при внедрении через @Qualifier(value = "getEntityManagerAnotherBean")
     public CommentHibRepository(final EntityManager entityManager) {
         this.entityManager = entityManager;
     }

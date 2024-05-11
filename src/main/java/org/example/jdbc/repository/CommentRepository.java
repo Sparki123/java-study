@@ -29,11 +29,11 @@ public class CommentRepository implements CrudRepository<CommentEntity, Long> {
              ResultSet resultSet = statement.executeQuery(SELECT_ALL_COMMENTS)) {
             while (resultSet.next()) {
                 final CommentEntity commentEntity = CommentEntity.builder()
-                        .id(resultSet.getLong("id"))
-                        .author(resultSet.getString("author"))
-                        .text(resultSet.getString("comment"))
-                        .postId(resultSet.getLong("post_id"))
-                        .build();
+                    .id(resultSet.getLong("id"))
+                    .author(resultSet.getString("author"))
+                    .text(resultSet.getString("comment"))
+                    .postId(resultSet.getLong("post_id"))
+                    .build();
                 commentEntities.add(commentEntity);
             }
         } catch (SQLException e) {
@@ -59,11 +59,11 @@ public class CommentRepository implements CrudRepository<CommentEntity, Long> {
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
                     final CommentEntity commentEntity = CommentEntity.builder()
-                            .id(resultSet.getLong("id"))
-                            .author(resultSet.getString("author"))
-                            .text(resultSet.getString("comment"))
-                            .postId(resultSet.getLong("post_id"))
-                            .build();
+                        .id(resultSet.getLong("id"))
+                        .author(resultSet.getString("author"))
+                        .text(resultSet.getString("comment"))
+                        .postId(resultSet.getLong("post_id"))
+                        .build();
                     return Optional.of(commentEntity);
                 }
             }
@@ -81,11 +81,11 @@ public class CommentRepository implements CrudRepository<CommentEntity, Long> {
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
                     final CommentEntity commentEntity = CommentEntity.builder()
-                            .id(resultSet.getLong("id"))
-                            .author(resultSet.getString("author"))
-                            .text(resultSet.getString("comment"))
-                            .postId(resultSet.getLong("post_id"))
-                            .build();
+                        .id(resultSet.getLong("id"))
+                        .author(resultSet.getString("author"))
+                        .text(resultSet.getString("comment"))
+                        .postId(resultSet.getLong("post_id"))
+                        .build();
                     commentEntities.add(commentEntity);
                 }
             }

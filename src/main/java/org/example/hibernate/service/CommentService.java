@@ -2,9 +2,11 @@ package org.example.hibernate.service;
 
 import org.example.hibernate.entity.Comment;
 import org.example.hibernate.repository.CommentHibRepository;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Component
 public class CommentService {
     private final CommentHibRepository commentRepository;
 
