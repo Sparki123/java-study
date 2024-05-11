@@ -4,7 +4,6 @@ import org.example.hibernate.entity.Comment;
 import org.example.hibernate.repository.CommentHibRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 public class CommentService {
     private final CommentHibRepository commentRepository;
@@ -21,8 +20,9 @@ public class CommentService {
         return commentRepository.save(comment);
     }
 
-    public Optional<Comment> getCommentById(final Long id) {
-        return commentRepository.findById(id);
+    public Comment getCommentById(final Long id) {
+        return commentRepository.findById(id).orElseThrow(
+            () -> new IllegalStateException("Post with id %s not found".formatted(id)));
     }
 
     public void deleteCommentById(final Long id) {

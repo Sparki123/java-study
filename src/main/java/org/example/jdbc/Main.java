@@ -1,6 +1,5 @@
 package org.example.jdbc;
 
-import org.example.hibernate.service.CommentService;
 import org.example.jdbc.util.PgConnectUtil;
 import org.hibernate.cfg.Configuration;
 
@@ -13,12 +12,17 @@ public class Main {
     public static void main(String[] args) {
         Configuration configuration = new Configuration();
         configuration.configure();
-//        CommentService commentService = new CommentService();
     }
 
     public static void init() {
         try (Connection connection = PgConnectUtil.getConnection();
              Statement statement = connection.createStatement()) {
+            final String dropCommentTable = "DROP TABLE IF EXISTS comments;";
+            statement.execute(dropCommentTable);
+
+            final String dropPostTable = "DROP TABLE IF EXISTS posts;";
+            statement.execute(dropPostTable);
+
             final String createPostTable = """
                                     CREATE TABLE IF NOT EXISTS posts
                                     (

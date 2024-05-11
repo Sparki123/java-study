@@ -4,6 +4,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import org.example.hibernate.entity.Comment;
 import org.example.hibernate.entity.Post;
+import org.example.hibernate.entity.User;
 import org.example.hibernate.utils.HibernateUtils;
 
 import java.util.List;
@@ -16,6 +17,11 @@ public class App {
 
         EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
+        User user = User.builder()
+            .userName("HelloWorld")
+            .email("test@mail.com")
+            .build();
+        entityManager.persist(user);
 
         Comment comment1 = Comment.builder()
             .text("Hello World!")
@@ -33,6 +39,7 @@ public class App {
         Post post = Post.builder()
             .content("hello World!")
             .titleText("hello world!")
+//            .user(user)
             .build()
             .withComment(comment1);
 

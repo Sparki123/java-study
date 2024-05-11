@@ -1,19 +1,22 @@
 package org.example.hibernate.entity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
-import jakarta.persistence.ForeignKey;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 import lombok.experimental.SuperBuilder;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -23,19 +26,19 @@ import lombok.experimental.SuperBuilder;
 @Accessors(chain = true)
 
 @Entity
-@Table(name = "comments")
-public class Comment extends BaseEntity {
+@Table(name = "users")
+public class User extends BaseEntity {
 
-    @Column(name = "author", nullable = false, length = 100)
-    private String author;
+    @Column(name = "user_name", nullable = false, length = 100)
+    private String userName;
 
-    @Column(name = "text")
-    private String text;
+    @Column(name = "email")
+    private String email;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id", foreignKey = @ForeignKey(name = "fk_comments_post"))
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @Builder.Default
     @ToString.Exclude
-    private Post post;
+    private List<Post> posts = new ArrayList<>();
 
     @Embedded
     private LoggingBase timestamps;
