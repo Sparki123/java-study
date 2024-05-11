@@ -1,15 +1,14 @@
 package org.example.hibernate.repository;
 
-import jakarta.persistence.EntityTransaction;
-import org.example.hibernate.entity.Comment;
-
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Query;
+import org.example.hibernate.entity.Comment;
 
 import java.util.List;
 import java.util.Optional;
 
-public class CommentHibRepository {
+public class CommentHibRepository implements CrudRepository<Comment, Long> {
     private final EntityManager entityManager;
 
     public CommentHibRepository(final EntityManager entityManager) {

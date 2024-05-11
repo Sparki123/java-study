@@ -8,7 +8,7 @@ import org.example.hibernate.entity.Post;
 import java.util.List;
 import java.util.Optional;
 
-public class PostHibRepository {
+public class PostHibRepository implements CrudRepository<Post, Long> {
     private final EntityManager entityManager;
 
     public PostHibRepository(EntityManager entityManager) {

@@ -7,7 +7,7 @@ import java.util.Optional;
 public interface CrudRepository<T, ID> {
     List<T> findAll();
 
-    T save(T post);
+    T save(T t);
 
     Optional<T> findById(ID id);
 

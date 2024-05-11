@@ -8,7 +8,7 @@ import org.example.hibernate.entity.User;
 import java.util.List;
 import java.util.Optional;
 
-public class UserHibernateRepository {
+public class UserHibernateRepository implements CrudRepository<User, Long> {
     private final EntityManager entityManager;
 
     public UserHibernateRepository(EntityManager entityManager) {

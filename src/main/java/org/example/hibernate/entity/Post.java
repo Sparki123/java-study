@@ -18,7 +18,6 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 import lombok.experimental.SuperBuilder;
 
-import java.security.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,17 +43,28 @@ public class Post extends BaseEntity {
     @ToString.Exclude
     private List<Comment> comments = new ArrayList<>();
 
+    @OneToMany(mappedBy = "post", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @Builder.Default
+    @ToString.Exclude
+    private List<Like> likes = new ArrayList<>();
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "fk_posts_user"))
     @ToString.Exclude
     private User user;
 
     @Embedded
-    private LoggingBase timestamps;
+    private Timestamp timestamps;
 
     public Post withComment(Comment comment) {
         this.comments.add(comment);
         comment.setPost(this);
+        return this;
+    }
+
+    public Post withLike(Like like) {
+        this.likes.add(like);
+        like.setPost(this);
         return this;
     }
 

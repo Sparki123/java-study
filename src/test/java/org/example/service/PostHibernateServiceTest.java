@@ -49,6 +49,7 @@ class PostHibernateServiceTest {
             .email("test@mail.com")
             .build();
         userHibRepository.save(user);
+
         Comment comment = Comment.builder()
             .text("Hello World!")
             .author("Kirill")
@@ -60,6 +61,8 @@ class PostHibernateServiceTest {
             .user(user)
             .build()
             .withComment(comment);
+
+        user.withPost(post);
 
         Post postDb = postService.savePost(post);
 

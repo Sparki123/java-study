@@ -3,6 +3,7 @@ package org.example.hibernate;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import org.example.hibernate.entity.Comment;
+import org.example.hibernate.entity.Like;
 import org.example.hibernate.entity.Post;
 import org.example.hibernate.entity.User;
 import org.example.hibernate.utils.HibernateUtils;
@@ -59,7 +60,14 @@ public class App {
             .withComment(Comment.builder()
                 .text("Hello World!333")
                 .author("Kirill222")
-                .build());
+                .build())
+            .withComment(Comment.builder()
+                .text("Hello World!333")
+                .author("Kirill222")
+                .build())
+            .withLike(Like.builder().build())
+            .withLike(Like.builder().build())
+            .withLike(Like.builder().build());
 
         entityManager.persist(post);
         entityManager.persist(post2);
@@ -94,13 +102,26 @@ public class App {
 
         entityManager.close();
 
-        System.out.println("===== JOINT FETCH ====");
+        System.out.println("===== JOIN FETCH ====");
 
         entityManager = HibernateUtils.getEntityManager();
         List<Post> resultList = entityManager.createQuery("FROM Post p JOIN FETCH p.comments", Post.class)
             .getResultList();
 
         resultList.forEach(System.out::println);
+
+        System.out.println("===== JOIN FETCH MULTIPLE LISTS ====");
+
+        entityManager = HibernateUtils.getEntityManager();
+        // нельзя делать выборку из нескольких списков, проблема декартового произведения
+        //https://vladmihalcea.com/hibernate-multiplebagfetchexception/
+        List<Post> resultListMultiple = entityManager.createQuery("""
+                        FROM Post p
+                        LEFT JOIN FETCH p.comments
+                """, Post.class)
+            .getResultList();
+
+        resultListMultiple.forEach(System.out::println);
 
         System.out.println("===== CACHE first lvl / second lvl ===== ");
 

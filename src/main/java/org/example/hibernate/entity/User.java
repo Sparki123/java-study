@@ -41,6 +41,11 @@ public class User extends BaseEntity {
     private List<Post> posts = new ArrayList<>();
 
     @Embedded
-    private LoggingBase timestamps;
+    private Timestamp timestamps;
 
+    public User withPost(Post post) {
+        posts.add(post);
+        post.setUser(this);
+        return this;
+    }
 }

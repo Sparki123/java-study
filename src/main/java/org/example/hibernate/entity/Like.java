@@ -1,7 +1,5 @@
 package org.example.hibernate.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ForeignKey;
@@ -23,21 +21,11 @@ import lombok.experimental.SuperBuilder;
 @Accessors(chain = true)
 
 @Entity
-@Table(name = "comments")
-public class Comment extends BaseEntity {
-
-    @Column(name = "author", nullable = false, length = 100)
-    private String author;
-
-    @Column(name = "text")
-    private String text;
+@Table(name = "likes")
+public class Like extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id", foreignKey = @ForeignKey(name = "fk_comments_post"))
+    @JoinColumn(name = "post_id", foreignKey = @ForeignKey(name = "fk_likes_post"))
     @ToString.Exclude
     private Post post;
-
-    @Embedded
-    private Timestamp timestamps;
-
 }
